@@ -6,7 +6,7 @@ Este documento descreve a arquitetura do projeto, desde o fluxo de CI/CD até a 
 
 ## Diagrama
 
-![Arquitetura Challenge Project 1](docs/challenge_arch_image.png)
+![Diagram Challenge Project 1](docs/challenge_arch_image.png)
 
 ## Componentes
 
@@ -23,7 +23,7 @@ Este documento descreve a arquitetura do projeto, desde o fluxo de CI/CD até a 
 
 ## 🏗 Componentes e Ferramentas
 - **Provisionamento de Cluster**:  
-  O cluster **Amazon EKS** é criado e configurado via **Terraform**, garantindo reprodutibilidade e versionamento da infraestrutura.
+  O cluster **Amazon EKS** é criado e configurado via **Terraform** e seu estado salvo num bucket S3 com lock habilitado para evitar concorrência.
 - **Instalação de Add-ons e Componentes**:  
   Utiliza-se **Helm** para instalar e gerenciar add-ons essenciais (Ingress Controller, Autoscaler, Observabilidade, etc.) e componentes da aplicação.
 - **Entrega Contínua (GitOps)**:  
