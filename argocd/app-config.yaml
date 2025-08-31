@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: challenge-1
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/acorreia89/challenge-project-1
+    targetRevision: main
+    path: helm/webapps/challenge-1-web
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://eks-challenge-1.default.svc
+    namespace: challenge-1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
