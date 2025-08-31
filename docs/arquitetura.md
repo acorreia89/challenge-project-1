@@ -6,7 +6,7 @@ Este documento descreve a arquitetura do projeto, desde o fluxo de CI/CD até a 
 
 ## Diagrama
 
-![Diagram Challenge Project 1](docs/diagram_challenge_image.png)
+![Diagram Challenge Project 1](./diagram_challenge_image.png)
 
 ## Componentes
 
