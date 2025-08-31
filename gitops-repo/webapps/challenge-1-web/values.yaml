@@ -23,10 +23,15 @@ ingress:
         - challenge.local
       secretName: challenge-tls
 
-canary:
-  steps:
-    - setWeight: 20
-    - pause: { duration: 30s }
-    - setWeight: 50
-    - pause: { duration: 1m }
 
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://otel-collector.observability.svc.cluster.local:4318"
+  - name: OTEL_SERVICE_NAME
+    value: "challenge-1-web"
+  - name: OTEL_METRICS_EXPORTER
+    value: "otlp"
+  - name: OTEL_TRACES_EXPORTER
+    value: "otlp"
+  - name: OTEL_LOGS_EXPORTER
+    value: "otlp"

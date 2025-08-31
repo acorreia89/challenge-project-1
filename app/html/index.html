@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 1 Web - Observabilidade</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- OpenTelemetry Web SDK (bundle) -->
+    <script src="https://unpkg.com/@opentelemetry/api"></script>
+    <script src="https://unpkg.com/@opentelemetry/sdk-trace-web"></script>
+    <script src="https://unpkg.com/@opentelemetry/context-zone"></script>
+    <script src="https://unpkg.com/@opentelemetry/instrumentation-fetch"></script>
+    <script src="https://unpkg.com/@opentelemetry/instrumentation-xml-http-request"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo ao Challenge 1 Web</h1>
+    </header>
+    <main>
+        <p>Esta página está instrumentada com OpenTelemetry para enviar traces e métricas.</p>
+        <button id="traceButton">Gerar Trace</button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Challenge Project</p>
+    </footer>
+</body>
+</html>
