@@ -1,7 +1,7 @@
 replicaCount: 3
 
 image:
-  repository: nginx
+  repository: <ecr-url>
   tag: "1.25"
   pullPolicy: IfNotPresent
 

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/acorreia89/challenge-project-1
     targetRevision: main
-    path: helm/webapps/challenge-1-web
+    path: gitops-repo/webapps/challenge-1-web
     helm:
       valueFiles:
         - values.yaml
