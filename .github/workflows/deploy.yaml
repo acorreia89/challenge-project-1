@@ -1,0 +1,61 @@
+name: Build and Deploy to ECR + GitOps Update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gitops-repo/**'
+      - '.github/workflows/deploy.yaml'
+
+env:
+  AWS_REGION: sa-east-1
+  ECR_REPOSITORY: challenge-1
+  GITOPS_PATH: gitops-repo/webapps/challenge-1-web/values.yaml
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and tag Docker image
+        run: |
+          IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG ./app
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Push image to ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+
+  update-gitops:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Update image tag in values.yaml
+        run: |
+          sed -i "s|tag: .*|tag: \"$IMAGE_TAG\"|" $GITOPS_PATH
+
+      - name: Commit and push changes
+        run: |
+          git add $GITOPS_PATH
+          git commit -m "Update image tag to $IMAGE_TAG"
+          git push
