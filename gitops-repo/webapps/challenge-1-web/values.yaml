@@ -1,0 +1,32 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: "1.25"
+  pullPolicy: IfNotPresent
+
+service:
+  name: challenge-1
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: challenge.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - challenge.local
+      secretName: challenge-tls
+
+canary:
+  steps:
+    - setWeight: 20
+    - pause: { duration: 30s }
+    - setWeight: 50
+    - pause: { duration: 1m }
+

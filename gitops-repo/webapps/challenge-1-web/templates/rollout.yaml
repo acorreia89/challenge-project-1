@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: challenge-1
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    canary:
+      steps:
+        {{- range .Values.canary.steps }}
+        - {{ toYaml . | nindent 10 }}
+        {{- end }}
+  selector:
+    matchLabels:
+      app: challenge-1
+  template:
+    metadata:
+      labels:
+        app: challenge-1
+    spec:
+      containers:
+        - name: challenge-1
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
